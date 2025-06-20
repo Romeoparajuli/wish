@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Happy Birthday My Love ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Romantic font -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        /* Body and container */
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(ellipse at top left, #ffb6c1 0%, #ffe4e1 100%) !important;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Hearts & roses container */
+        #hearts-container {
+            position: fixed;
+            pointer-events: none;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 50;
+            overflow: visible;
+        }
+
+        /* Falling animation */
+        @keyframes fall {
+            0% {
+                transform: translateY(-20vh) scale(0.7) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(110vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Pop animation */
+        @keyframes pop {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.4);
+                opacity: 0.7;
+            }
+        }
+
+        .falling {
+            position: absolute;
+            animation-name: fall;
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
+        }
+
+        .popping {
+            animation-name: pop;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+            display: inline-block;
+        }
+
+        /* Welcome Screen */
+        #welcome-screen {
+            position: fixed;
+            inset: 0;
+            background: #ffdeeb;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        #welcome-screen h1 {
+            font-size: 2.5rem;
+            color: #d6336c;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-align: center;
+            text-shadow: 0 0 8px #f72585;
+            user-select: none;
+        }
+
+        /* Heart loading bar container */
+        #heart-loader {
+            width: 120px;
+            height: 120px;
+            position: relative;
+        }
+
+        /* Heart shape with SVG */
+        #heart-loader svg {
+            width: 120px;
+            height: 120px;
+            transform: rotate(-90deg);
+        }
+
+        /* Circle track background */
+        #heart-loader circle.bg {
+            stroke: #f5c2e7;
+            stroke-width: 10;
+            fill: none;
+        }
+
+        /* Circle progress */
+        #heart-loader circle.progress {
+            stroke: #d6336c;
+            stroke-width: 10;
+            fill: none;
+            stroke-linecap: round;
+            stroke-dasharray: 339.292;
+            /* circumference */
+            stroke-dashoffset: 339.292;
+            transition: stroke-dashoffset 0.3s ease;
+        }
+
+        /* Text below heart loader */
+        #loading-text {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #b5179e;
+            letter-spacing: 2px;
+            user-select: none;
+        }
+
+        /* Layout after welcome */
+        #main-content {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Slideshow container */
+        #slideshow-container {
+            width: 50vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset -5px 0 30px -5px rgba(214, 51, 108, 0.5);
+            border-top-right-radius: 40px;
+            border-bottom-right-radius: 40px;
+        }
+
+        /* Slide images */
+        #slideshow-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-top-right-radius: 40px;
+            border-bottom-right-radius: 40px;
+            transition: opacity 1s ease-in-out;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Only the active image is visible */
+        #slideshow-container img:not(.active) {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Message container */
+        #message-container {
+            width: 50vw;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 3rem 2.5rem;
+            background: white;
+            box-shadow: inset 5px 0 30px -5px rgba(214, 51, 108, 0.2);
+            user-select: text;
+            position: relative;
+            border-top-left-radius: 40px;
+            border-bottom-left-radius: 40px;
+        }
+
+        /* Scrollbar style for message */
+        #message-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #message-container::-webkit-scrollbar-thumb {
+            background: #d6336c;
+            border-radius: 8px;
+        }
+
+        #message-container::-webkit-scrollbar-track {
+            background: #ffe6f0;
+            border-radius: 8px;
+        }
+
+        /* Scroll icon */
+        #scroll-icon {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: #d6336c;
+            font-size: 1.6rem;
+            user-select: none;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        /* Responsive: on small screens stack vertically */
+        @media (max-width: 768px) {
+            #main-content {
+                flex-direction: column;
+            }
+
+            #slideshow-container,
+            #message-container {
+                width: 100vw;
+                height: 50vh;
+                border-radius: 0;
+            }
+
+            #slideshow-container {
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            #message-container {
+                border-radius: 0;
+                box-shadow: none;
+                padding: 1.5rem 1rem;
+            }
+
+            #scroll-icon {
+                bottom: 8px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Message text styles */
+        #message-container h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #d6336c;
+            margin-bottom: 1rem;
+            text-align: center;
+            user-select: none;
+        }
+
+        #message-container p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #4a4a4a;
+            margin-bottom: 1.25rem;
+            user-select: text;
+        }
+
+        #message-container ul {
+            margin-left: 1.25rem;
+            margin-bottom: 1.25rem;
+            color: #d6336c;
+        }
+
+        #message-container ul li {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            user-select: text;
+        }
+
+        /* Hearts animation */
+        .heart {
+            position: absolute;
+            font-size: 2.2rem;
+            pointer-events: none;
+            animation: drop 2.2s linear forwards;
+            z-index: 10;
+            filter: drop-shadow(0 2px 8px #e75480aa);
+        }
+
+        @keyframes drop {
+            0% {
+                transform: translateY(-60px) scale(0.7);
+                opacity: 0.7;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            90% {
+                transform: translateY(90vh) scale(1.3);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(90vh) scale(2.1);
+                opacity: 0;
+            }
+        }
+
+        /* Scroll-to-end icon (bottom-right, floating) */
+        .scroll-to-end {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #fff0f6;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px #e75480aa;
+            padding: 0.7rem;
+            cursor: pointer;
+            z-index: 100;
+            transition: background 0.2s;
+            font-size: 2rem;
+            border: none;
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scroll-to-end:hover {
+            background: #ffe4e1;
+        }
+
+        /* Romantic text enhancements */
+        .romantic-message {
+            text-align: center;
+            margin: 2rem 0;
+            font-size: 2rem;
+            color: #e75480;
+            font-family: 'Great Vibes', cursive, sans-serif;
+            text-shadow: 0 2px 8px #fff, 0 1px 0 #e75480;
+            letter-spacing: 1.5px;
+            line-height: 1.5;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 18px;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 4px 16px #e7548033;
+            display: inline-block;
+        }
+
+        .font-greatvibes {
+            font-family: 'Great Vibes', cursive;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Hearts and Roses Falling -->
+    <div id="hearts-container"></div>
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen">
+        <h1>Welcome, My Love… 💖</h1>
+
+        <div id="heart-loader">
+            <svg viewBox="0 0 120 120">
+                <circle class="bg" cx="60" cy="60" r="54" />
+                <circle class="progress" cx="60" cy="60" r="54" />
+            </svg>
+        </div>
+
+        <div id="loading-text">Loading...</div>
+    </div>
+
+    <!-- Main content after loading -->
+    <div id="main-content">
+        <!-- Slideshow Left -->
+        <div id="slideshow-container">
+            <img src="images/1.jpg" alt="Slide 1" class="active" id="slideshow-image" />
+
+        </div>
+
+        <!-- Scrollable Message Right -->
+        <div id="message-container">
+            <h1 class="font-greatvibes text-4xl mb-6 drop-shadow-lg" style="color:#e75480;">🌸✨ My Love, My World, My
+                Forever
+                ✨🌸</h1>
+
+            <p class="font-greatvibes text-2xl mb-4" style="color:#e75480;">Happy Birthday, my jaanu ❤️🎂🎉</p>
+
+            <p class="font-greatvibes text-xl mb-4" style="color:#e75480;">5 whole years… and still, every time I look
+                at you, I
+                fall in love all over again. 🥹💕<br>
+                You're not just my girlfriend — you're my best friend, my safe place, my sunshine, and the most
+                beautiful soul I’ve ever known. 🌞💫</p>
+
+            <p class="font-greatvibes text-xl mb-4" style="color:#e75480;">You make my world better just by being in it.
+                You’ve
+                held my hand through every storm and danced with me through every joy. 💃🕺<br>
+                You’ve seen the rawest parts of me and still chose to love me unconditionally.<br>
+                And I promise you, with all my heart, that I’ll spend the rest of my life making you feel as loved,
+                safe, and cherished as you make me feel. 💍🫶</p>
+
+            <p class="font-greatvibes text-xl mb-4" style="color:#e75480;">Today isn’t just your birthday. It’s a
+                celebration of
+                the day the universe blessed me with my everything. 🌍💖</p>
+
+            <p class="font-greatvibes text-xl mb-4" style="color:#e75480;">I see our future so clearly, baby. A cozy
+                home with
+                your laughter echoing through it, sleepy morning cuddles, late night talks, silly fights and endless
+                kisses. 👩‍❤️‍👨🏡<br>
+                And one day, maybe little versions of us running around calling you “mama.” 👶🍼</p>
+
+            <p class="font-greatvibes text-xl mb-4" style="color:#e75480;">I want forever with you. In every lifetime,
+                in every
+                world, I will find you and choose you — over and over again. ♾️❤️</p>
+
+            <p class="font-greatvibes text-xl mb-4" style="color:#e75480;">So today, I just want to say…</p>
+
+            <p class="font-greatvibes text-2xl mb-4" style="color:#e75480;">I love you — wildly, deeply, truly — beyond
+                words,
+                beyond limits. 💋🔥</p>
+
+            <p class="font-greatvibes text-xl mb-4" style="color:#e75480;">Let’s keep building our story, hand in hand,
+                heart
+                to heart… forever. 💑💞</p>
+
+            <p class="text-center font-greatvibes text-2xl mt-8" style="color:#e75480;">Forever yours,<br>Your Romeo
+                💌❤️</p>
+
+
+        </div>
+        <!-- Scroll-to-end icon (bottom-right, floating) -->
+        <button class="scroll-to-end" title="Scroll to end"
+            onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">
+            ⬇️
+        </button>
+    </div>
+
+    <!-- Romantic message (add near top or bottom of body) -->
+    <div class="romantic-message">
+        💖 Wishing you a day filled with love, laughter, and beautiful moments! 💖
+    </div>
+
+    <script>
+        // Animate the heart loader progress
+        const progressCircle = document.querySelector('#heart-loader circle.progress');
+        const radius = progressCircle.r.baseVal.value;
+        const circumference = 2 * Math.PI * radius;
+
+        progressCircle.style.strokeDasharray = circumference;
+        progressCircle.style.strokeDashoffset = circumference;
+
+        function setProgress(percent) {
+            const offset = circumference - (percent / 100) * circumference;
+            progressCircle.style.strokeDashoffset = offset;
+        }
+
+        let progress = 0;
+        const loadingText = document.getElementById('loading-text');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const mainContent = document.getElementById('main-content');
+
+        let loadingInterval = setInterval(() => {
+            progress += 3 + Math.random() * 5;
+            if (progress >= 100) progress = 100;
+            setProgress(progress);
+            loadingText.textContent = `Loading... ${Math.floor(progress)}%`;
+
+            if (progress >= 100) {
+                clearInterval(loadingInterval);
+                setTimeout(() => {
+                    welcomeScreen.style.opacity = '0';
+                    welcomeScreen.style.transition = 'opacity 1s ease';
+                    setTimeout(() => {
+                        welcomeScreen.style.display = 'none';
+                        mainContent.style.display = 'flex';
+                    }, 1000);
+                }, 500);
+            }
+        }, 100);
+
+        // Slideshow for 1.jpg to 28.jpg
+        const images = [
+            '1.jpg',
+            '2.jpg',
+            '3.jpeg',
+            '4.jpg',
+            '5.jpg',
+            '6.jpg',
+            '7.jpg',
+            '8.jpg',
+            '9.jpg',
+            '10.jpg',
+            '11.jpeg',
+            '12.jpg',
+            '13.jpg',
+            '14.jpg',
+            '15.jpg',
+            '16.jpg',
+            '17.jpg',
+            '18.jpg',
+            '19.jpg',
+            '20.jpeg',
+            '21.jpeg',
+            '22.jpeg',
+            '23.jpeg',
+            '24.jpeg',
+            '25.jpeg',
+            '26.jpeg',
+            '27.jpeg'
+        ];
+
+        let currentSlide = 0;
+        const imageFolder = 'images/';
+        const slideshowImage = document.getElementById('slideshow-image');
+
+        function showSlide(index) {
+            slideshowImage.src = imageFolder + images[index];
+            slideshowImage.alt = 'Slide ' + (index + 1);
+        }
+
+        showSlide(currentSlide);
+
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % images.length;
+            showSlide(currentSlide);
+        }, 4000);
+
+        // Hearts and roses falling logic
+        const heartsContainer = document.getElementById('hearts-container');
+        const heartTypes = ['❤️', '🌹'];
+        function createFalling() {
+            const elem = document.createElement('div');
+            elem.innerText = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+            elem.className = 'falling popping';
+            elem.style.fontSize = `${Math.random() * 20 + 15}px`;
+            elem.style.left = `${Math.random() * 100}vw`;
+            elem.style.animationDuration = `${4 + Math.random() * 3}s`;
+            elem.style.top = '-30px';
+            heartsContainer.appendChild(elem);
+
+            setTimeout(() => elem.remove(), 8000);
+        }
+        setInterval(createFalling, 350);
+
+        // Hearts, cakes, and balloons dropping and popping
+        function createHeart() {
+            const emojis = ['❤️', '❤️', '🌹', '💖', '💕', '💘', '🎂', '🎈', '🎉'];
+            const heart = document.createElement('span');
+            heart.className = 'heart';
+            heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            heart.style.left = Math.random() * 95 + 'vw';
+            heart.style.top = '-40px';
+            document.body.appendChild(heart);
+            heart.addEventListener('animationend', () => heart.remove());
+        }
+        setInterval(createHeart, 400);
+    </script>
+</body>
+
+</html>
